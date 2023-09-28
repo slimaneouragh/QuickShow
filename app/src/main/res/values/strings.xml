@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Quick Show</string>
+    <string name="Remsh">Remsh</string>
+    <string name="History">History</string>
+    <string name="Saved">Saved</string>
+    <string name="Settings">Settings</string>
+    <string name="Search">Search</string>
+    <string name="Chose_your_Language">Chose Your Language</string>
+    <string name="CameraPermission">Camera Permission</string>
+</resources>
