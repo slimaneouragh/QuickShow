@@ -53,7 +53,7 @@ import com.example.remch.MyViewModel
 import com.example.remch.R
 import com.example.remch.ui.theme.dosis_font
 import com.example.remch.ui.theme.tsukimi_font
-import com.example.remch.utils.ListTranslationView
+import com.example.remch.utils.customComponante.ListTranslationView
 import com.example.remch.utils.SpinningProgressBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -138,6 +138,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
             }
         )
     }
+
     var pickerValueMinutes by remember {
         mutableStateOf(
             if (timerValue.value >= 60) {
@@ -154,7 +155,6 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
     var visibleTextAbout by remember { mutableStateOf(false) }
 
     var Allert by remember { mutableStateOf(false) }
-
 
     val worker: WorkManager = WorkManager.getInstance(context)
 
@@ -299,9 +299,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(0.89f)
-//                           .padding(vertical = 10.dp),
-                            ,
+                                .fillMaxWidth(0.89f),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -315,7 +313,6 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
                                 fetchDataType.value.let {
 
-
                                     Row(
                                         modifier = Modifier
                                             .noRippleClickable {
@@ -323,7 +320,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                             },
                                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                                         verticalAlignment = Alignment.CenterVertically
-                                    ) {
+                                    ){
                                         Text(
                                             text = "RANDOMLY", color =
                                             if (it == TypesOfFetchData.RANDOMLY.name)
@@ -350,6 +347,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                             modifier = Modifier.size(18.dp)
                                         )
                                     }
+
                                     if (it == TypesOfFetchData.RANDOMLY.name) {
                                         Divider(Modifier.fillMaxWidth(0.7f),
                                             color = Color(1,1,1))

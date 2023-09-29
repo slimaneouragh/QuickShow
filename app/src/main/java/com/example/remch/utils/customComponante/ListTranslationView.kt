@@ -1,4 +1,4 @@
-package com.example.remch.utils
+package com.example.remch.utils.customComponante
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -46,12 +46,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.Translations
 import com.example.remch.MyViewModel
 import com.example.remch.R
 import com.example.remch.ui.theme.dosis_font
-import com.example.remch.utils.customComponante.shake
 import com.exyte.animatednavbar.utils.noRippleClickable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
