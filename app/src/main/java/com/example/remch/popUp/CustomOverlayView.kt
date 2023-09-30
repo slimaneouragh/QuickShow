@@ -27,8 +27,8 @@ class CustomOverlayView(
     text: Array<String>
 ) : ViewGroup(context) {
 
-    lateinit var layoutInflater: LayoutInflater
-    lateinit var mview: View
+     var layoutInflater: LayoutInflater
+     var mview: View
 
 
     init {
