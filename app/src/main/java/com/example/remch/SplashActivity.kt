@@ -7,6 +7,7 @@ import android.os.PersistableBundle
 import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -46,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.remch.ui.theme.RemchTheme
 import com.example.remch.ui.theme.dosis_font
@@ -77,9 +79,9 @@ class SplashActivity : ComponentActivity() {
     }
 
     @SuppressLint("CoroutineCreationDuringComposition")
-    @Preview
     @Composable
     fun SplashScreen() {
+
 
         var size by remember {
             mutableStateOf(0f)

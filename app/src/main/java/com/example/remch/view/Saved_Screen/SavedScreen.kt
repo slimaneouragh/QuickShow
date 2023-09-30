@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -55,6 +57,7 @@ import com.example.remch.ui.theme.dosis_font
 import com.example.remch.ui.theme.tsukimi_font
 import com.example.remch.utils.customComponante.ListTranslationView
 import com.example.remch.utils.SpinningProgressBar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -123,7 +126,30 @@ fun SavedScreen(viewModel: MyViewModel) {
         } else {
             Color(220, 220, 220, 255)
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = {  SnackbarHost(hostState = snackbarHostState) { data ->
+
+            Snackbar(modifier = Modifier.padding(4.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp)
+                ) {
+                    Text(
+                        text = "Removed from Saved List",
+                        color = Color.White,
+                        fontFamily = dosis_font[3]
+                    )
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.triangle_warning_svgrepo_com),
+                        contentDescription = "",
+                        tint = Color(255, 196, 0, 255)
+                    )
+                }
+
+            }
+        } }
     ) {
 
 
@@ -200,21 +226,14 @@ fun SavedScreen(viewModel: MyViewModel) {
 
 
                 ListTranslationView(viewModel = viewModel, listfrom, action = {
-                    scope.launch {
 
-                        val result = snackbarHostState.showSnackbar(
-                            message = "The Translation is UnSaved",
-                            actionLabel = "Undo",
+                   scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = "",
                             duration = SnackbarDuration.Short
                         )
-
-
-                        when (result) {
-                            SnackbarResult.ActionPerformed -> {
-                            }
-
-                            SnackbarResult.Dismissed -> {
-                                viewModel.updateTranslation(
+                   }
+                        viewModel.updateTranslation(
                                     Translations(
                                         id = it!!.id,
                                         from = it.from,
@@ -225,11 +244,30 @@ fun SavedScreen(viewModel: MyViewModel) {
                                     )
                                 )
 
-                            }
-                        }
 
-                    }
-                })
+//                        when (result) {
+//                            SnackbarResult.ActionPerformed -> {
+//                            }
+//
+//                            SnackbarResult.Dismissed -> {
+//                                viewModel.updateTranslation(
+//                                    Translations(
+//                                        id = it!!.id,
+//                                        from = it.from,
+//                                        to = it.to,
+//                                        textFrom = it.textFrom,
+//                                        textTo = it.textTo,
+//                                        saved = false
+//                                    )
+//                                )
+//
+//                            }
+//
+//                        }
+
+
+                }
+                )
                 {
 
 

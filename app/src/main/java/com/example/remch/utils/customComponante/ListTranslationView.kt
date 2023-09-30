@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.Translations
 import com.example.remch.MyViewModel
 import com.example.remch.R
@@ -63,7 +64,8 @@ import kotlinx.coroutines.withContext
 fun ListTranslationView(
     viewModel: MyViewModel, list: List<Translations?>,
     addSaveIcon: Boolean? = false,
-    action: (translation: Translations?) -> Unit,
+    action: (translations: Translations?) -> Unit,
+    second_action: ((translation: Translations?) -> Unit)? = null,
     optionalAction: ((any: Any?) -> Unit)? = null
 ) {
 
@@ -80,7 +82,7 @@ fun ListTranslationView(
         ), label = ""
     )
 
-    var savedID by remember { mutableStateOf(0) }
+    var savedIDList = remember { mutableStateListOf<Int>() }
     var lazyListState = rememberLazyListState()
 
     val deletedList = remember { mutableStateListOf<Translations?>() }
@@ -102,7 +104,7 @@ fun ListTranslationView(
                 modifier = Modifier
                     .noRippleClickable {
                         if (selectedList.isNotEmpty()) {
-                            scope.launch {
+                            viewModel.viewModelScope.launch {
                                 selectedList.forEach {
                                     deletedList.add(list[it])
                                     delay(300)
@@ -157,25 +159,33 @@ fun ListTranslationView(
                 )
             }
 
-            Row(
-                modifier = Modifier
-                    .noRippleClickable {
-
-                    },
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Save", color = Color(41, 121, 255, 255),
-                    fontFamily = dosis_font[0],
-                    fontSize = 14.sp
-                )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.save_add_svgrepo_com),
-                    contentDescription = "",
-                    tint = Color(41, 121, 255, 255),
-                    modifier = Modifier.size(18.dp)
-                )
+            if (addSaveIcon!!){
+                Row(
+                    modifier = Modifier
+                        .noRippleClickable {
+                            scope.launch {
+                                selectedList.forEach { index ->
+                                    withContext(Dispatchers.IO) {
+                                        second_action?.invoke(list[index])
+                                    }
+                                }
+                            }
+                        },
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Save", color = Color(41, 121, 255, 255),
+                        fontFamily = dosis_font[0],
+                        fontSize = 14.sp
+                    )
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.save_add_svgrepo_com),
+                        contentDescription = "",
+                        tint = Color(41, 121, 255, 255),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
 
         }
@@ -190,8 +200,9 @@ fun ListTranslationView(
             .padding(top = 0.dp),
         content = {
 
-
-            itemsIndexed(list) { index, item ->
+            itemsIndexed(list, key = { index, item ->
+                index
+            }) { index, item ->
 
                 AnimatedVisibility(
                     visible = !deletedList.contains(item),
@@ -315,32 +326,28 @@ fun ListTranslationView(
                         }
 
                         if (addSaveIcon == true) {
-                            if (item!!.id != savedID) {
-                                if (!item.saved) {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.save_add_svgrepo_com),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .shake(true)
-                                            .align(Alignment.TopEnd)
-                                            .padding(5.dp)
-                                            .size(30.dp)
-                                            .noRippleClickable {
-                                                viewModel.updateTranslation(
-                                                    Translations(
-                                                        id = item.id,
-                                                        from = item.from,
-                                                        to = item.to,
-                                                        textFrom = item.textFrom,
-                                                        textTo = item.textTo,
-                                                        saved = true
-                                                    )
-                                                )
-                                                savedID = item.id
-                                            }
-                                    )
+                            item?.let { item ->
+                                if (!savedIDList.contains(item.id)) {
+                                    if (!item.saved) {
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(R.drawable.save_add_svgrepo_com),
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .align(Alignment.TopEnd)
+                                                .padding(5.dp)
+                                                .size(30.dp)
+                                                .noRippleClickable {
+
+                                                    viewModel.viewModelScope.launch(Dispatchers.IO) {
+                                                        second_action?.invoke(list[index])
+                                                    }
+                                                    savedIDList.add(item.id)
+                                                }
+                                        )
+                                    }
                                 }
                             }
+
 
                         }
 

@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewModelScope
 import androidx.work.Data
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -34,6 +35,7 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -49,14 +51,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        lazy {
+        viewModel.viewModelScope.launch {
             viewModel.getFetchType()
             viewModel.getTime()
             viewModel.getState()
             viewModel.getAllTranslation()
             viewModel.getAllSavedTranslation()
         }
+
 
         if (!hasSystemAlertWindowPermission()) {
             requestSystemAlertWindowPermission()

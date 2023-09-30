@@ -1,18 +1,10 @@
 package com.example.remch.view.settings_Screen
 
 import android.annotation.SuppressLint
-import android.graphics.PixelFormat
 import android.os.Build
-import android.view.Gravity
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -20,44 +12,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,45 +41,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.chargemap.compose.numberpicker.AMPMHoursNumberPicker
 import com.chargemap.compose.numberpicker.NumberPicker
-import com.example.domain.entity.Translations
-import com.example.remch.MainActivity
 import com.example.remch.MyViewModel
 import com.example.remch.R
-import com.example.remch.popUp.Worker
 import com.example.remch.ui.theme.apple_font
 import com.example.remch.ui.theme.dosis_font
 import com.example.remch.ui.theme.tsukimi_font
 import com.example.remch.utils.TypesOfFetchData
 import com.exyte.animatednavbar.utils.noRippleClickable
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint(
@@ -124,6 +86,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    viewModel.getFetchType()
 
     val timerValue = viewModel.getTime.collectAsStateWithLifecycle()
     var triggerSnackbar = viewModel.triggerSnackBar.collectAsStateWithLifecycle()
@@ -292,7 +255,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
                         Divider(
                             modifier = Modifier
-                                .padding(bottom = 5.dp)
+                                .padding(vertical = 10.dp)
                                 .fillMaxWidth(0.6f)
                         )
 
@@ -348,10 +311,10 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                         )
                                     }
 
-                                    if (it == TypesOfFetchData.RANDOMLY.name) {
-                                        Divider(Modifier.fillMaxWidth(0.7f),
-                                            color = Color(1,1,1))
-                                    }
+//                                    if (it == TypesOfFetchData.RANDOMLY.name) {
+//                                        Divider(Modifier.fillMaxWidth(0.7f),
+//                                            color = Color(1,1,1))
+//                                    }
 
 
                                 }
@@ -400,10 +363,10 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                             modifier = Modifier.size(18.dp)
                                         )
                                     }
-                                    if (it == TypesOfFetchData.LAST_THREE.name) {
-                                        Divider(Modifier.fillMaxWidth(0.7f),
-                                            color = Color(1,1,1))
-                                    }
+//                                    if (it == TypesOfFetchData.LAST_THREE.name) {
+//                                        Divider(Modifier.fillMaxWidth(0.7f),
+//                                            color = Color(1,1,1))
+//                                    }
 
 
                                 }
@@ -421,14 +384,14 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                     Row(
                                         modifier = Modifier
                                             .noRippleClickable {
-                                                viewModel.changeFetchDataType(TypesOfFetchData.HYBRID)
+                                                viewModel.changeFetchDataType(TypesOfFetchData.SAVED)
                                             },
                                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = "HYBRID", color =
-                                            if (it == TypesOfFetchData.HYBRID.name)
+                                            text = "SAVED", color =
+                                            if (it == TypesOfFetchData.SAVED.name)
                                                 Color(
                                                     41,
                                                     121,
@@ -439,10 +402,10 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                             fontSize = 14.sp
                                         )
                                         Icon(
-                                            imageVector = ImageVector.vectorResource(id = R.drawable.hybrid_networking_alt_svgrepo_com),
+                                            imageVector = ImageVector.vectorResource(id = R.drawable.save_add_svgrepo_com),
                                             contentDescription = "",
                                             tint =
-                                            if (it == TypesOfFetchData.HYBRID.name)
+                                            if (it == TypesOfFetchData.SAVED.name)
                                                 Color(
                                                     41,
                                                     121,
@@ -452,10 +415,10 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                             modifier = Modifier.size(18.dp)
                                         )
                                     }
-                                    if (it == TypesOfFetchData.HYBRID.name) {
-                                        Divider(Modifier.fillMaxWidth(0.7f),
-                                            color = Color(1,1,1))
-                                    }
+//                                    if (it == TypesOfFetchData.SAVED.name) {
+//                                        Divider(Modifier.fillMaxWidth(0.7f),
+//                                            color = Color(1,1,1))
+//                                    }
 
 
                                 }
@@ -466,7 +429,7 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
                         Divider(
                             modifier = Modifier
-                                .padding(top = 5.dp)
+                                .padding(vertical = 10.dp)
                                 .fillMaxWidth(0.6f)
                         )
 
@@ -507,17 +470,35 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                 } else {
                                     Allert = false
 
-                                    viewModel.viewModelScope.launch {
-                                        viewModel.changeTime(((pickerValueHours * 60) + pickerValueMinutes))
-                                        viewModel.changeState(true)
+                                        viewModel.viewModelScope.launch {
+                                            viewModel.changeTime(((pickerValueHours * 60) + pickerValueMinutes))
+                                            viewModel.changeState(true)
 
-                                        viewModel.launchWorker(
-                                            pickerValueHours = pickerValueHours,
-                                            pickerValueMinutes = pickerValueMinutes,
-                                            type = TypesOfFetchData.LAST_THREE,
-                                            context = context
-                                        )
-                                    }
+                                            viewModel.launchWorker(
+                                                pickerValueHours = pickerValueHours,
+                                                pickerValueMinutes = pickerValueMinutes,
+                                                type =  when (fetchDataType.value) {
+                                                    TypesOfFetchData.RANDOMLY.name -> {
+                                                        TypesOfFetchData.RANDOMLY
+                                                    }
+
+                                                    TypesOfFetchData.LAST_THREE.name -> {
+                                                        TypesOfFetchData.LAST_THREE
+                                                    }
+
+                                                    TypesOfFetchData.SAVED.name -> {
+                                                        TypesOfFetchData.SAVED
+                                                    }
+
+                                                    else -> {
+                                                        TypesOfFetchData.RANDOMLY
+                                                    }
+                                                },
+                                                context = context
+                                            )
+                                        }
+
+
 
                                 }
 

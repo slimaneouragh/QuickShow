@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
+import com.example.domain.entity.Translations
 import com.example.remch.MyViewModel
 import com.example.remch.R
 import com.example.remch.ui.theme.dosis_font
@@ -176,6 +177,17 @@ fun History(viewModel: MyViewModel) {
 
                 ListTranslationView(viewModel = viewModel, listfrom, true, action = {
                     viewModel.deleteOneTranslation(it!!.id)
+                }, second_action = {
+                    it?.let {
+                        viewModel.updateTranslation(
+                            Translations(it.id,
+                                from = it.from,
+                                to = it.to,
+                                textFrom = it.textFrom,
+                                textTo = it.textTo,
+                                saved = true)
+                        )
+                    }
                 })
                 {
                     showFloatingButton = false

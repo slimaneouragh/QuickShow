@@ -107,13 +107,11 @@ fun Exchange(viewModel: MyViewModel) {
     var shoseToLanguage by remember { mutableStateOf(false) }
 
 
-    viewModel.getState()
-    viewModel.getTime()
+//    viewModel.getState()
+//    viewModel.getTime()
+//    viewModel.getFetchType()
 
-    val lastThreeTranslation =
-        viewModel.getLastThree.value.collectAsState(initial = emptyList())
-    val timerState =
-        viewModel.getState.collectAsStateWithLifecycle()
+
     val timerValue =
         viewModel.getTime.collectAsStateWithLifecycle()
 
@@ -372,55 +370,6 @@ fun Exchange(viewModel: MyViewModel) {
                                     .noRippleClickable {
                                         if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-
-//                                            viewModel.getThreeLastTranslation()
-//                                            if (timerState.value) {
-//
-//                                                lastThreeTranslation.value?.let {
-//                                                    worker = WorkManager.getInstance(context)
-//                                                    worker.cancelAllWork()
-//
-//                                                    val listOfTranslation: ArrayList<String> =
-//                                                        arrayListOf<String>()
-//                                                    for (t in 0 until (it.size)) {
-//
-//                                                        listOfTranslation.add(it[t]!!.textFrom)
-//                                                        listOfTranslation.add(it[t]!!.textTo)
-//                                                        listOfTranslation.add(it[t]!!.from)
-//                                                        listOfTranslation.add(it[t]!!.to)
-//
-//                                                    }
-//                                                    val taskData =
-//                                                        Data
-//                                                            .Builder()
-//                                                            .putStringArray(
-//                                                                "Text",
-//                                                                listOfTranslation.toTypedArray() as Array<out String>
-//                                                            )
-//                                                            .build()
-//                                                    val request =
-//                                                        PeriodicWorkRequestBuilder<Worker>(
-//                                                            timerValue.value.toLong(),
-//                                                            TimeUnit.MINUTES
-//                                                        )
-//                                                            .setInputData(taskData)
-//                                                            .build()
-//
-//                                                    worker
-//                                                        .getWorkInfoByIdLiveData(request.id)
-//                                                        .observe(
-//                                                            MainActivity(),
-//                                                            androidx.lifecycle.Observer { workInfo ->
-//                                                                workInfo.let {
-//
-//
-//                                                                }
-//                                                            })
-//
-//                                                    worker.enqueue(request)
-//
-//                                                }
-//                                            }
                                             if (
                                                 lastTranslation.value!!.textFrom != fromTextState
                                                 &&
@@ -448,8 +397,8 @@ fun Exchange(viewModel: MyViewModel) {
                                                                 TypesOfFetchData.LAST_THREE.name
                                                             }
 
-                                                            TypesOfFetchData.HYBRID.name -> {
-                                                                TypesOfFetchData.HYBRID.name
+                                                            TypesOfFetchData.SAVED.name -> {
+                                                                TypesOfFetchData.SAVED.name
                                                             }
 
                                                             else -> {
@@ -514,6 +463,8 @@ fun Exchange(viewModel: MyViewModel) {
                                         )
 
                                         Toast.makeText(context,fetchDataType.value,Toast.LENGTH_LONG).show()
+
+
                                         viewModel.viewModelScope.launch {
                                             viewModel.launchWorker(
                                                 totalTimeInMinutes = timerValue.value,
@@ -527,8 +478,8 @@ fun Exchange(viewModel: MyViewModel) {
                                                         TypesOfFetchData.LAST_THREE.name
                                                     }
 
-                                                    TypesOfFetchData.HYBRID.name -> {
-                                                        TypesOfFetchData.HYBRID.name
+                                                    TypesOfFetchData.SAVED.name -> {
+                                                        TypesOfFetchData.SAVED.name
                                                     }
 
                                                     else -> {

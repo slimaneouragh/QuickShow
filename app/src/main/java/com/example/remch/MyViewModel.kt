@@ -45,7 +45,6 @@ class MyViewModel @Inject constructor(
     private val GetAllSavedTranslation: GetAllSavedTranslation,
 ) : ViewModel() {
 
-
     val worker: WorkManager = WorkManager.getInstance(context)
 
     val dataStore = PreferenceStorage(context)
@@ -322,7 +321,7 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun changeFetchDataType(type : TypesOfFetchData) {
+    fun changeFetchDataType(type: TypesOfFetchData) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 dataStore.changeFetchDataType(type)
@@ -450,8 +449,43 @@ class MyViewModel @Inject constructor(
                 }
             }
 
-            TypesOfFetchData.HYBRID -> {
+            TypesOfFetchData.SAVED -> {
+                getAllSavedTranslation()
 
+                getAllSaved.value.collect {
+
+                    if (it.isEmpty()) {
+
+                        updateTriggerSnackBar(true)
+
+                    } else {
+
+                        listOfTranslation.clear()
+
+                        for (t in 0 until (it.size)) {
+
+                            listOfTranslation.add(it[t]!!.textFrom)
+                            listOfTranslation.add(it[t]!!.textTo)
+                            listOfTranslation.add(it[t]!!.from)
+                            listOfTranslation.add(it[t]!!.to)
+
+                        }
+                        worker.cancelAllWork()
+
+                        val taskData =
+                            Data.Builder().putStringArray(
+                                "Text",
+                                listOfTranslation.toTypedArray() as Array<out String>
+                            ).build()
+                        val request = PeriodicWorkRequestBuilder<Worker>(
+                            ((pickerValueHours * 60) + pickerValueMinutes).toLong(),
+                            TimeUnit.MINUTES
+                        ).setInputData(taskData).build()
+                        worker.enqueue(request)
+
+
+                    }
+                }
             }
         }
 
@@ -548,8 +582,44 @@ class MyViewModel @Inject constructor(
                 }
             }
 
-            TypesOfFetchData.HYBRID.name -> {
+            TypesOfFetchData.SAVED.name -> {
 
+                getAllSavedTranslation()
+
+                getAllSaved.value.collect {
+
+                    if (it.isEmpty()) {
+
+                        updateTriggerSnackBar(true)
+
+                    } else {
+
+                        listOfTranslation.clear()
+
+                        for (t in 0 until (it.size)) {
+
+                            listOfTranslation.add(it[t]!!.textFrom)
+                            listOfTranslation.add(it[t]!!.textTo)
+                            listOfTranslation.add(it[t]!!.from)
+                            listOfTranslation.add(it[t]!!.to)
+
+                        }
+                        worker.cancelAllWork()
+
+                        val taskData =
+                            Data.Builder().putStringArray(
+                                "Text",
+                                listOfTranslation.toTypedArray() as Array<out String>
+                            ).build()
+                        val request = PeriodicWorkRequestBuilder<Worker>(
+                            totalTimeInMinutes.toLong(),
+                            TimeUnit.MINUTES
+                        ).setInputData(taskData).build()
+                        worker.enqueue(request)
+
+
+                    }
+                }
             }
         }
 
