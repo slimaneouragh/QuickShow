@@ -43,6 +43,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,11 +82,12 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-@SuppressLint("StateFlowValueCalledInComposition")
+@SuppressLint("StateFlowValueCalledInComposition", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -93,8 +95,8 @@ fun Exchange(viewModel: MyViewModel) {
     val focusManager = LocalFocusManager.current
     val listLanguageWithTAG = TranslateLanguage.getAllLanguages()
     val listLanguage = viewModel.listLanguage.collectAsStateWithLifecycle().value
-    var fetchDataType = viewModel.fetchType.collectAsStateWithLifecycle()
-
+//    var fetchDataType = viewModel.fetchType.collectAsStateWithLifecycle()
+val scope = rememberCoroutineScope()
 
     var co by remember { mutableStateOf(false) }
 
@@ -112,33 +114,36 @@ fun Exchange(viewModel: MyViewModel) {
 //    viewModel.getFetchType()
 
 
-    val timerValue =
-        viewModel.getTime.collectAsStateWithLifecycle()
+//    val timerValue = viewModel.getTime.collectAsStateWithLifecycle()
 
 
-    viewModel.getThreeLastTranslation()
+//    viewModel.getThreeLastTranslation()
     viewModel.getLastTranslation()
 
 
-    val lastTrans = viewModel.getLast.value.collectAsStateWithLifecycle(
-        initialValue = null
-    )
+//    val lastTranslation = viewModel.getLast.collectAsStateWithLifecycle( ).value
+    val lastTrans = viewModel.getLast.collectAsStateWithLifecycle(initialValue = null)
     val lastTranslation = remember(lastTrans.value) { derivedStateOf { lastTrans.value } }
 
 
     var fromLanguage by remember { mutableStateOf(listLanguage[12]) }
     var toLanguage by remember { mutableStateOf(listLanguage[7]) }
     var medianLanguage by remember { mutableStateOf(listLanguage[12]) }
-    lastTranslation.value?.let {
-        if (!co) {
-            fromLanguage = it.from
-            toLanguage = it.to
-            co = true
-            fromLanguageIndex = listLanguage.indexOf(it.from)
-            toLanguageIndex = listLanguage.indexOf(it.to)
+
+
+        lastTranslation.value?.let {
+            if (!co) {
+                fromLanguage = it.from
+                toLanguage = it.to
+                co = true
+                fromLanguageIndex = listLanguage.indexOf(it.from)
+                toLanguageIndex = listLanguage.indexOf(it.to)
+            }
+
         }
 
-    }
+
+
     var fromTextState by remember { mutableStateOf("") }
     var toTextState by remember { mutableStateOf("") }
     var medianTextState by remember { mutableStateOf("") }
@@ -171,7 +176,7 @@ fun Exchange(viewModel: MyViewModel) {
                 toTextState = it
             }
             .addOnFailureListener {
-                Log.d("Tag", "FailureTranslation")
+//                Log.d("Tag", "FailureTranslation")
 
             }
 
@@ -368,69 +373,60 @@ fun Exchange(viewModel: MyViewModel) {
                                     .align(Alignment.TopCenter)
                                     .padding(top = 20.dp)
                                     .noRippleClickable {
-                                        if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-                                            if (
-                                                lastTranslation.value!!.textFrom != fromTextState
-                                                &&
-                                                lastTranslation.value!!.textTo != toTextState
-                                            ) {
+                                            lastTranslation.value?.let{
+                                                if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-                                                viewModel.addTranslation(
-                                                    Translations(
-                                                        from = fromLanguage,
-                                                        to = toLanguage,
-                                                        textFrom = fromTextState,
-                                                        textTo = toTextState
-                                                    )
-                                                )
+                                                    //                                            if (
+                                                    //                                                lastTranslation.value!!.textFrom != fromTextState
+                                                    //                                                &&
+                                                    //                                                lastTranslation.value!!.textTo != toTextState
+                                                    //                                            ) {
+                                                    //
+                                                    //                                                viewModel.addTranslation(
+                                                    //                                                    Translations(
+                                                    //                                                        from = fromLanguage,
+                                                    //                                                        to = toLanguage,
+                                                    //                                                        textFrom = fromTextState,
+                                                    //                                                        textTo = toTextState
+                                                    //                                                    )
+                                                    //                                                )
+                                                    //
+                                                    //
+                                                    //
+                                                    //                                            }
 
-                                                viewModel.viewModelScope.launch {
-                                                    viewModel.launchWorker(
-                                                        totalTimeInMinutes = timerValue.value,
-                                                        type = when (fetchDataType.value) {
-                                                            TypesOfFetchData.RANDOMLY.name -> {
-                                                                TypesOfFetchData.RANDOMLY.name
-                                                            }
+                                                    if (
+                                                        it.textFrom != fromTextState
+                                                        &&
+                                                        it.textTo != toTextState
+                                                    ) {
+                                                        viewModel.addTranslation(
+                                                            Translations(
+                                                                from = fromLanguage,
+                                                                to = toLanguage,
+                                                                textFrom = fromTextState,
+                                                                textTo = toTextState
+                                                            )
+                                                        )
+                                                    }
 
-                                                            TypesOfFetchData.LAST_THREE.name -> {
-                                                                TypesOfFetchData.LAST_THREE.name
-                                                            }
-
-                                                            TypesOfFetchData.SAVED.name -> {
-                                                                TypesOfFetchData.SAVED.name
-                                                            }
-
-                                                            else -> {
-                                                                TypesOfFetchData.RANDOMLY.name
-                                                            }
-                                                        },
-                                                        context = context
-                                                    )
+                                                } else {
+                                                    Toast
+                                                        .makeText(
+                                                            context,
+                                                            "Please Write Something",
+                                                            Toast.LENGTH_LONG
+                                                        )
+                                                        .show()
                                                 }
-
                                             }
 
-                                            if (lastTranslation.value == null) {
-                                                viewModel.addTranslation(
-                                                    Translations(
-                                                        from = fromLanguage,
-                                                        to = toLanguage,
-                                                        textFrom = fromTextState,
-                                                        textTo = toTextState
-                                                    )
-                                                )
-                                            }
 
-                                        } else {
-                                            Toast
-                                                .makeText(
-                                                    context,
-                                                    "Please Write Something",
-                                                    Toast.LENGTH_LONG
-                                                )
-                                                .show()
-                                        }
+
+
+
+
                                         fromTextState = ""
                                         toTextState = ""
                                     }
@@ -445,55 +441,70 @@ fun Exchange(viewModel: MyViewModel) {
 
                             if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-                                viewModel.getLastTranslation()
-                                lastTranslation.value?.let {
+//                                viewModel.getLastTranslation()
 
-                                    if (
-                                        lastTranslation.value!!.textFrom != fromTextState
-                                        &&
-                                        lastTranslation.value!!.textTo != toTextState
-                                    ) {
-                                        viewModel.addTranslation(
-                                            Translations(
-                                                from = fromLanguage,
-                                                to = toLanguage,
-                                                textFrom = fromTextState,
-                                                textTo = toTextState
-                                            )
-                                        )
+                                    lastTranslation.value?.let {
 
-                                        Toast.makeText(context,fetchDataType.value,Toast.LENGTH_LONG).show()
+//                                    if (
+//                                        lastTranslation.value!!.textFrom != fromTextState
+//                                        &&
+//                                        lastTranslation.value!!.textTo != toTextState
+//                                    ) {
+//                                        viewModel.addTranslation(
+//                                            Translations(
+//                                                from = fromLanguage,
+//                                                to = toLanguage,
+//                                                textFrom = fromTextState,
+//                                                textTo = toTextState
+//                                            )
+//                                        )
 
 
-                                        viewModel.viewModelScope.launch {
-                                            viewModel.launchWorker(
-                                                totalTimeInMinutes = timerValue.value,
-                                                type =
-                                                when (fetchDataType.value) {
-                                                    TypesOfFetchData.RANDOMLY.name -> {
-                                                        TypesOfFetchData.RANDOMLY.name
-                                                    }
+//                                        viewModel.viewModelScope.launch {
+//                                            viewModel.launchWorker(
+//                                                totalTimeInMinutes = timerValue.value,
+//                                                type =
+//                                                when (fetchDataType.value) {
+//                                                    TypesOfFetchData.RANDOMLY.name -> {
+//                                                        TypesOfFetchData.RANDOMLY.name
+//                                                    }
+//
+//                                                    TypesOfFetchData.LAST_THREE.name -> {
+//                                                        TypesOfFetchData.LAST_THREE.name
+//                                                    }
+//
+//                                                    TypesOfFetchData.SAVED.name -> {
+//                                                        TypesOfFetchData.SAVED.name
+//                                                    }
+//
+//                                                    else -> {
+//                                                        TypesOfFetchData.RANDOMLY.name
+//                                                    }
+//                                                }
+//                                                ,
+//                                                context = context
+//                                            )
+//                                        }
 
-                                                    TypesOfFetchData.LAST_THREE.name -> {
-                                                        TypesOfFetchData.LAST_THREE.name
-                                                    }
+//                                    }
 
-                                                    TypesOfFetchData.SAVED.name -> {
-                                                        TypesOfFetchData.SAVED.name
-                                                    }
-
-                                                    else -> {
-                                                        TypesOfFetchData.RANDOMLY.name
-                                                    }
-                                                }
-                                                ,
-                                                context = context
+                                        if (
+                                            it.textFrom != fromTextState
+                                                    &&
+                                            it.textTo != toTextState
+                                        ) {
+                                            viewModel.addTranslation(
+                                                Translations(
+                                                    from = fromLanguage,
+                                                    to = toLanguage,
+                                                    textFrom = fromTextState,
+                                                    textTo = toTextState
+                                                )
                                             )
                                         }
-
                                     }
-                                }
 
+//
                                 if (lastTranslation.value == null) {
                                     viewModel.addTranslation(
                                         Translations(
@@ -504,6 +515,10 @@ fun Exchange(viewModel: MyViewModel) {
                                         )
                                     )
                                 }
+
+
+
+
 
 
 //
@@ -660,7 +675,7 @@ fun Exchange(viewModel: MyViewModel) {
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             Text(
-                                                text = it.from,
+                                                text = it!!.from,
                                                 color = Color(22, 22, 22, 255),
                                                 modifier = Modifier
 
@@ -675,7 +690,7 @@ fun Exchange(viewModel: MyViewModel) {
                                             )
 
                                             Text(
-                                                text = it.to,
+                                                text = it!!.to,
                                                 color = Color(22, 22, 22, 255),
                                                 modifier = Modifier
 
@@ -698,7 +713,7 @@ fun Exchange(viewModel: MyViewModel) {
                                             horizontalAlignment = Alignment.Start,
                                         ) {
                                             Text(
-                                                text = it.textFrom,
+                                                text = it!!.textFrom,
                                                 color = Color(22, 22, 22, 255),
                                                 modifier = Modifier
 
@@ -708,7 +723,7 @@ fun Exchange(viewModel: MyViewModel) {
                                             )
 
                                             Text(
-                                                text = it.textTo,
+                                                text = it!!.textTo,
                                                 color = Color(22, 22, 22, 255),
                                                 modifier = Modifier
 

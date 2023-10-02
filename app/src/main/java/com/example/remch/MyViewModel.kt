@@ -135,8 +135,8 @@ class MyViewModel @Inject constructor(
         MutableStateFlow(emptyFlow())
     val getAllSaved: StateFlow<Flow<List<Translations?>>> = _getAllSaved
 
-    private val _getLast: MutableStateFlow<Flow<Translations?>> = MutableStateFlow(emptyFlow())
-    val getLast: StateFlow<Flow<Translations?>> = _getLast
+    private val _getLast: MutableStateFlow<Translations?> = MutableStateFlow(null)
+    val getLast: StateFlow<Translations?> = _getLast
 
     private val _getLastThree: MutableStateFlow<Flow<List<Translations?>>> =
         MutableStateFlow(emptyFlow())
@@ -216,7 +216,9 @@ class MyViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _getLast.value = GetLastTranslation()
+                 GetLastTranslation().collect{
+                    _getLast.value = it
+                }
             } catch (e: Exception) {
 
             }

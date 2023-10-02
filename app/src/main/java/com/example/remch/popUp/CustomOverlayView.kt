@@ -36,14 +36,6 @@ class CustomOverlayView(
 
     init {
 
-//        var list = arrayListOf<Array<String>>()
-//        val a = text.size / 4
-//        var index = 0
-//        for (i in 0 until a){
-//            list.add(text.sliceArray(index..(index+3)))
-//            index += 4
-//        }
-
 
         val randomFromList = text.random()
 
