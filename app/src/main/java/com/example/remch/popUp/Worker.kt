@@ -16,10 +16,18 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.room.Database
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.example.data.local.TranslationDatabase
+import com.example.domain.entity.Translations
 import com.example.remch.Window
+import com.example.remch.utils.TypesOfFetchData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
 
 
@@ -32,7 +40,28 @@ class Worker(context: Context, workparams: WorkerParameters) : CoroutineWorker(c
     override suspend fun doWork(): Result {
 
         val taskdata = inputData
-        val taskdataString = taskdata.getStringArray("Text")
+        val taskdataString = taskdata.getString("Text")
+
+        var data: Flow<List<Translations>>? = null
+
+        when(taskdataString){
+            TypesOfFetchData.RANDOMLY.name ->{
+
+                data = TranslationDatabase.getDatabase(contex).translationDao().getRandomTranslation()
+
+            }
+            TypesOfFetchData.LAST_THREE.name ->{
+
+                data = TranslationDatabase.getDatabase(contex).translationDao().getThreeLastTranslation()
+
+            }
+            TypesOfFetchData.SAVED.name ->{
+
+                data = TranslationDatabase.getDatabase(contex).translationDao().getAllSavedTranslation()
+
+            }
+        }
+
 
 
 
@@ -47,18 +76,30 @@ class Worker(context: Context, workparams: WorkerParameters) : CoroutineWorker(c
             height = 900 // Set the desired height
         }
 
-        withContext(Dispatchers.Main) {
-            Window(window, layoutParams).open(
-                CustomOverlayView(
-                    contex,
-                    window,
-                    layoutParams,
-                    taskdataString!!
-                ).createView(
-                    contex
+        data?.collectLatest {
+            withContext(Dispatchers.Main) {
+                Window(window, layoutParams).open(
+//                    CustomOverlayView(
+//                        contex,
+//                        window,
+//                        layoutParams,
+//                        taskdataString!!
+//                    ).createView(
+//                        contex
+//                    )
+
+                        CustomOverlayView(
+                        contex,
+                        window,
+                        layoutParams,
+                        it
+                    ).createView(
+                        contex
+                    )
                 )
-            )
+            }
         }
+
 
         return Result.success()
     }

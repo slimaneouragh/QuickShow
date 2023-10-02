@@ -92,8 +92,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#3E3E3E"
+                android:layout_height="0.6dp"
+                android:background="#BE7F7F7F"
                 android:layout_marginTop="10dp"
                 />
 

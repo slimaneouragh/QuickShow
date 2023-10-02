@@ -369,33 +369,33 @@ class MyViewModel @Inject constructor(
 
         when (type) {
             TypesOfFetchData.RANDOMLY -> {
-                getRandomTranslation()
+//                getRandomTranslation()
 
-                getRandomly.value.collect {
-                    if (it.isEmpty()) {
-                        Toast.makeText(
-                            context,
-                            "Make Any Translation before to Activate this Option",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
+//                getRandomly.value.collect {
+//                    if (it.isEmpty()) {
+//                        Toast.makeText(
+//                            context,
+//                            "Make Any Translation before to Activate this Option",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    } else {
 
-                        listOfTranslation.clear()
+//                        listOfTranslation.clear()
 
-                        for (t in 0 until (it.size)) {
+//                        for (t in 0 until (it.size)) {
 
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type.name
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             ((pickerValueHours * 60) + pickerValueMinutes).toLong(),
@@ -404,39 +404,39 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
+//                    }
 
-                }
+//                }
 
 
             }
 
             TypesOfFetchData.LAST_THREE -> {
-                getThreeLastTranslation()
-                getLastThree.value.collect {
+//                getThreeLastTranslation()
+//                getLastThree.value.collect {
 
-                    if (it.isEmpty()) {
+//                    if (it.isEmpty()) {
+//
+//                        updateTriggerSnackBar(true)
+//
+//                    } else {
 
-                        updateTriggerSnackBar(true)
-
-                    } else {
-
-                        listOfTranslation.clear()
-
-                        for (t in 0 until (it.size)) {
-
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
+//                        listOfTranslation.clear()
+//
+//                        for (t in 0 until (it.size)) {
+//
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type.name
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             ((pickerValueHours * 60) + pickerValueMinutes).toLong(),
@@ -445,37 +445,37 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
-                }
+//                    }
+//                }
             }
 
             TypesOfFetchData.SAVED -> {
-                getAllSavedTranslation()
+//                getAllSavedTranslation()
+//
+//                getAllSaved.value.collect {
 
-                getAllSaved.value.collect {
+//                    if (it.isEmpty()) {
+//
+//                        updateTriggerSnackBar(true)
+//
+//                    } else {
 
-                    if (it.isEmpty()) {
+//                        listOfTranslation.clear()
 
-                        updateTriggerSnackBar(true)
-
-                    } else {
-
-                        listOfTranslation.clear()
-
-                        for (t in 0 until (it.size)) {
-
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
+//                        for (t in 0 until (it.size)) {
+//
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type.name
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             ((pickerValueHours * 60) + pickerValueMinutes).toLong(),
@@ -484,8 +484,8 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
-                }
+//                    }
+//                }
             }
         }
 
@@ -498,37 +498,37 @@ class MyViewModel @Inject constructor(
         context: Context
     ) {
 
-        val listOfTranslation: ArrayList<String> = arrayListOf<String>()
+//        val listOfTranslation: ArrayList<String> = arrayListOf<String>()
 
         when (type) {
             TypesOfFetchData.RANDOMLY.name -> {
-                getRandomTranslation()
+//                getRandomTranslation()
 
-                getRandomly.value.collect {
-                    if (it.isEmpty()) {
-                        Toast.makeText(
-                            context,
-                            "Make Any Translation before to Activate this Option",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
+//                getRandomly.value.collect {
+//                    if (it.isEmpty()) {
+//                        Toast.makeText(
+//                            context,
+//                            "Make Any Translation before to Activate this Option",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                    } else {
 
-                        listOfTranslation.clear()
-
-                        for (t in 0 until (it.size)) {
-
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
+//                        listOfTranslation.clear()
+//
+//                        for (t in 0 until (it.size)) {
+//
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             totalTimeInMinutes.toLong(),
@@ -537,39 +537,39 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
+//                    }
 
-                }
+//                }
 
 
             }
 
             TypesOfFetchData.LAST_THREE.name -> {
-                getThreeLastTranslation()
-                getLastThree.value.collect {
+//                getThreeLastTranslation()
+//                getLastThree.value.collect {
 
-                    if (it.isEmpty()) {
+//                    if (it.isEmpty()) {
+//
+//                        updateTriggerSnackBar(true)
+//
+//                    } else {
 
-                        updateTriggerSnackBar(true)
-
-                    } else {
-
-                        listOfTranslation.clear()
-
-                        for (t in 0 until (it.size)) {
-
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
+//                        listOfTranslation.clear()
+//
+//                        for (t in 0 until (it.size)) {
+//
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             totalTimeInMinutes.toLong(),
@@ -578,38 +578,39 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
-                }
+//                    }
+//                }
             }
 
             TypesOfFetchData.SAVED.name -> {
 
-                getAllSavedTranslation()
+//                getAllSavedTranslation()
 
-                getAllSaved.value.collect {
+//                getAllSaved.value.collect {
 
-                    if (it.isEmpty()) {
+//                    if (it.isEmpty()) {
+//
+//                        updateTriggerSnackBar(true)
+//
+//                    } else {
 
-                        updateTriggerSnackBar(true)
+//                        listOfTranslation.clear()
 
-                    } else {
+//                        for (t in 0 until (it.size)) {
+//
+//                            listOfTranslation.add(it[t]!!.textFrom)
+//                            listOfTranslation.add(it[t]!!.textTo)
+//                            listOfTranslation.add(it[t]!!.from)
+//                            listOfTranslation.add(it[t]!!.to)
+//
+//                        }
 
-                        listOfTranslation.clear()
-
-                        for (t in 0 until (it.size)) {
-
-                            listOfTranslation.add(it[t]!!.textFrom)
-                            listOfTranslation.add(it[t]!!.textTo)
-                            listOfTranslation.add(it[t]!!.from)
-                            listOfTranslation.add(it[t]!!.to)
-
-                        }
                         worker.cancelAllWork()
 
                         val taskData =
-                            Data.Builder().putStringArray(
+                            Data.Builder().putString(
                                 "Text",
-                                listOfTranslation.toTypedArray() as Array<out String>
+                                type
                             ).build()
                         val request = PeriodicWorkRequestBuilder<Worker>(
                             totalTimeInMinutes.toLong(),
@@ -618,8 +619,8 @@ class MyViewModel @Inject constructor(
                         worker.enqueue(request)
 
 
-                    }
-                }
+//                    }
+//                }
             }
         }
 

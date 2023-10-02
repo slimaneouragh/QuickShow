@@ -10,19 +10,19 @@ import com.example.domain.entity.Translations
 abstract class TranslationDatabase():RoomDatabase(){
 abstract fun translationDao() : dao
     companion object {
-//        @Volatile
-//        private var Instance:TranslationDatabase? = null
-//        fun getDatabase(context: Context): TranslationDatabase {
-//            return Instance ?: synchronized(this){
-//                Room.databaseBuilder(context = context,TranslationDatabase::class.java,"translationDatabase")
-//                    .fallbackToDestructiveMigration()
-//                    .build()
-//                    .also {
-//                        Instance = it
-//                    }
-//
-//            }
-//
-//        }
+        @Volatile
+        private var Instance:TranslationDatabase? = null
+        fun getDatabase(context: Context): TranslationDatabase {
+            return Instance ?: synchronized(this){
+                Room.databaseBuilder(context = context,TranslationDatabase::class.java,"translationDatabase")
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also {
+                        Instance = it
+                    }
+
+            }
+
+        }
     }
 }

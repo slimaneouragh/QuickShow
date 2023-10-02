@@ -1,5 +1,6 @@
 package com.example.remch.popUp
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -12,6 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavDeepLinkRequest
+import com.example.domain.entity.Translations
 import com.example.domain.usecase.GetThreeLastTranslation
 import com.example.remch.MyViewModel
 import com.example.remch.R
@@ -20,11 +22,12 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 
+@SuppressLint("ViewConstructor")
 class CustomOverlayView(
     context: Context,
     val window: WindowManager,
     val layoutParams: WindowManager.LayoutParams,
-    text: Array<String>
+    text: List<Translations>
 ) : ViewGroup(context) {
 
      var layoutInflater: LayoutInflater
@@ -32,16 +35,17 @@ class CustomOverlayView(
 
 
     init {
-        var list = arrayListOf<Array<String>>()
-        val a = text.size / 4
-        var index = 0
-        for (i in 0 until a){
-            list.add(text.sliceArray(index..(index+3)))
-            index += 4
-        }
 
-        val randomFromList = list.random()
+//        var list = arrayListOf<Array<String>>()
+//        val a = text.size / 4
+//        var index = 0
+//        for (i in 0 until a){
+//            list.add(text.sliceArray(index..(index+3)))
+//            index += 4
+//        }
 
+
+        val randomFromList = text.random()
 
 
         layoutInflater =
@@ -55,10 +59,10 @@ class CustomOverlayView(
         }
 
         text?.let {
-            mview.findViewById<TextView>(R.id.fromText).setText(randomFromList[0])
-            mview.findViewById<TextView>(R.id.toText).setText(randomFromList[1])
-            mview.findViewById<TextView>(R.id.from).setText(randomFromList[2])
-            mview.findViewById<TextView>(R.id.to).setText(randomFromList[3])
+            mview.findViewById<TextView>(R.id.fromText).text = randomFromList.textFrom
+            mview.findViewById<TextView>(R.id.toText).text = randomFromList.textTo
+            mview.findViewById<TextView>(R.id.from).text = randomFromList.from
+            mview.findViewById<TextView>(R.id.to).text = randomFromList.to
         }
 
     }
