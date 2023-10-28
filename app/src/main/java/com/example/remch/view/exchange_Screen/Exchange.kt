@@ -109,15 +109,6 @@ val scope = rememberCoroutineScope()
     var shoseToLanguage by remember { mutableStateOf(false) }
 
 
-//    viewModel.getState()
-//    viewModel.getTime()
-//    viewModel.getFetchType()
-
-
-//    val timerValue = viewModel.getTime.collectAsStateWithLifecycle()
-
-
-//    viewModel.getThreeLastTranslation()
     viewModel.getLastTranslation()
 
 
@@ -377,25 +368,6 @@ val scope = rememberCoroutineScope()
                                             lastTranslation.value?.let{
                                                 if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-                                                    //                                            if (
-                                                    //                                                lastTranslation.value!!.textFrom != fromTextState
-                                                    //                                                &&
-                                                    //                                                lastTranslation.value!!.textTo != toTextState
-                                                    //                                            ) {
-                                                    //
-                                                    //                                                viewModel.addTranslation(
-                                                    //                                                    Translations(
-                                                    //                                                        from = fromLanguage,
-                                                    //                                                        to = toLanguage,
-                                                    //                                                        textFrom = fromTextState,
-                                                    //                                                        textTo = toTextState
-                                                    //                                                    )
-                                                    //                                                )
-                                                    //
-                                                    //
-                                                    //
-                                                    //                                            }
-
                                                     if (
                                                         it.textFrom != fromTextState
                                                         &&
@@ -422,11 +394,6 @@ val scope = rememberCoroutineScope()
                                                 }
                                             }
 
-
-
-
-
-
                                         fromTextState = ""
                                         toTextState = ""
                                     }
@@ -441,52 +408,7 @@ val scope = rememberCoroutineScope()
 
                             if (toTextState.isNotEmpty() && fromTextState.isNotEmpty()) {
 
-//                                viewModel.getLastTranslation()
-
                                     lastTranslation.value?.let {
-
-//                                    if (
-//                                        lastTranslation.value!!.textFrom != fromTextState
-//                                        &&
-//                                        lastTranslation.value!!.textTo != toTextState
-//                                    ) {
-//                                        viewModel.addTranslation(
-//                                            Translations(
-//                                                from = fromLanguage,
-//                                                to = toLanguage,
-//                                                textFrom = fromTextState,
-//                                                textTo = toTextState
-//                                            )
-//                                        )
-
-
-//                                        viewModel.viewModelScope.launch {
-//                                            viewModel.launchWorker(
-//                                                totalTimeInMinutes = timerValue.value,
-//                                                type =
-//                                                when (fetchDataType.value) {
-//                                                    TypesOfFetchData.RANDOMLY.name -> {
-//                                                        TypesOfFetchData.RANDOMLY.name
-//                                                    }
-//
-//                                                    TypesOfFetchData.LAST_THREE.name -> {
-//                                                        TypesOfFetchData.LAST_THREE.name
-//                                                    }
-//
-//                                                    TypesOfFetchData.SAVED.name -> {
-//                                                        TypesOfFetchData.SAVED.name
-//                                                    }
-//
-//                                                    else -> {
-//                                                        TypesOfFetchData.RANDOMLY.name
-//                                                    }
-//                                                }
-//                                                ,
-//                                                context = context
-//                                            )
-//                                        }
-
-//                                    }
 
                                         if (
                                             it.textFrom != fromTextState
@@ -515,63 +437,6 @@ val scope = rememberCoroutineScope()
                                         )
                                     )
                                 }
-
-
-
-
-
-
-//
-//                                viewModel.getThreeLastTranslation()
-//                                if (timerState.value) {
-//
-//                                    lastThreeTranslation.value?.let {
-//                                        worker = WorkManager.getInstance(context)
-//                                        worker.cancelAllWork()
-//
-//                                        val listOfTranslation: ArrayList<String> =
-//                                            arrayListOf<String>()
-//                                        for (t in 0 until (it.size)) {
-//
-//                                            listOfTranslation.add(it[t]!!.textFrom)
-//                                            listOfTranslation.add(it[t]!!.textTo)
-//                                            listOfTranslation.add(it[t]!!.from)
-//                                            listOfTranslation.add(it[t]!!.to)
-//
-//                                        }
-//                                        val taskData =
-//                                            Data.Builder().putStringArray(
-//                                                "Text",
-//                                                listOfTranslation.toTypedArray() as Array<out String>
-//                                            ).build()
-//                                        val request = PeriodicWorkRequestBuilder<Worker>(
-//                                            timerValue.value.toLong(),
-//                                            TimeUnit.MINUTES
-//                                        ).setInputData(taskData).build()
-//
-//                                        worker.getWorkInfoByIdLiveData(request.id)
-//                                            .observe(
-//                                                MainActivity(),
-//                                                androidx.lifecycle.Observer { workInfo ->
-//                                                    workInfo.let {
-//
-//
-//                                                    }
-//                                                })
-//
-//                                        worker.enqueue(request)
-//
-//                                    }
-//                                }
-//
-//                                viewModel.addTranslation(
-//                                    Translations(
-//                                        from = fromLanguage,
-//                                        to = toLanguage,
-//                                        textFrom = fromTextState,
-//                                        textTo = toTextState
-//                                    )
-//                                )
 
                             }
                             focusManager.clearFocus()

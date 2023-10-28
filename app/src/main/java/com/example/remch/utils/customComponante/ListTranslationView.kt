@@ -79,7 +79,7 @@ fun ListTranslationView(
         animationSpec = infiniteRepeatable(
             animation = tween(1000),
             repeatMode = RepeatMode.Reverse
-        ), label = ""
+        )
     )
 
     var savedIDList = remember { mutableStateListOf<Int>() }

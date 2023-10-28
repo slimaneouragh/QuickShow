@@ -21,6 +21,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.IconButton
+import androidx.compose.material.SwitchColors
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,7 +32,9 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,7 +74,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint(
     "StateFlowValueCalledInComposition", "RestrictedApi",
-    "UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition"
+    "UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition",
+    "SuspiciousIndentation"
 )
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -162,8 +166,8 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(220, 220, 220, 255)),
+                    .fillMaxSize(),
+//                    .background(Color(220, 220, 220, 255)),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -171,7 +175,12 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
 
                 Text(
                     text = stringResource(id = R.string.Settings),
-                    color = Color(22, 22, 22, 255),
+                    color = if (isSystemInDarkTheme())
+                        Color(192, 190, 190, 255)
+                    else{
+
+                        Color(22, 22, 22, 255)
+                                                                                },
                     modifier = Modifier.padding(top = 20.dp),
                     fontFamily = tsukimi_font,
                     fontSize = 20.sp
@@ -183,7 +192,8 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                 Divider(
                     modifier = Modifier
                         .padding(top = 20.dp, bottom = 20.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.8f),
+                    color =  if (isSystemInDarkTheme()) Color(32, 32, 32, 255) else Color(220, 220, 220, 255)
                 )
 
 
@@ -239,6 +249,25 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                         checked = checked,
                         onCheckedChange = null,
                         enabled = enabled,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor =  if (isSystemInDarkTheme()) Color(
+                                214,
+                                214,
+                                214,
+                                255
+                            ) else Color(
+                                48,
+                                47,
+                                47,
+                                255
+                            ),
+                          checkedTrackColor = if (isSystemInDarkTheme()) Color(
+                              175,
+                              175,
+                              175,
+                              255
+                          ) else Color(129, 129, 129, 255),
+                        )
                     )
                 }
 
@@ -256,8 +285,15 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                         Divider(
                             modifier = Modifier
                                 .padding(vertical = 10.dp)
-                                .fillMaxWidth(0.6f)
-                        )
+                                .fillMaxWidth(0.6f),
+                            color =  if (isSystemInDarkTheme()) Color(196, 196, 196, 255) else Color(
+                                56,
+                                56,
+                                56,
+                                255
+                            )
+
+                            )
 
 
                         Row(
@@ -430,7 +466,13 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                         Divider(
                             modifier = Modifier
                                 .padding(vertical = 10.dp)
-                                .fillMaxWidth(0.6f)
+                                .fillMaxWidth(0.6f),
+                            color = if (isSystemInDarkTheme()) Color(196, 196, 196, 255) else Color(
+                                56,
+                                56,
+                                56,
+                                255
+                            )
                         )
 
 
@@ -448,7 +490,12 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                 onValueChange = {
                                     pickerValueHours = it
                                 },
-                                dividersColor = Color(87, 87, 87, 164)
+                                dividersColor =  if (isSystemInDarkTheme()) Color(196, 196, 196, 255) else Color(
+                                    56,
+                                    56,
+                                    56,
+                                    255
+                                )
 
                             )
                             Text(text = "Hours")
@@ -458,7 +505,12 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                                 onValueChange = {
                                     pickerValueMinutes = it
                                 },
-                                dividersColor = Color(87, 87, 87, 164)
+                                dividersColor =   if (isSystemInDarkTheme()) Color(196, 196, 196, 255) else Color(
+                                    56,
+                                    56,
+                                    56,
+                                    255
+                                )
                             )
                             Text(text = "Minutes")
 
@@ -554,7 +606,13 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                 Divider(
                     modifier = Modifier
                         .padding(top = 20.dp, bottom = 20.dp)
-                        .fillMaxWidth(0.9f)
+                        .fillMaxWidth(0.9f),
+                    color =  if (isSystemInDarkTheme()) Color(196, 196, 196, 255) else Color(
+                        56,
+                        56,
+                        56,
+                        255
+                    )
                 )
 
                 Row(
@@ -624,7 +682,8 @@ fun Settings(viewModel: MyViewModel, navController: NavController) {
                         Divider(
                             modifier = Modifier
                                 .padding(top = 20.dp, bottom = 20.dp)
-                                .fillMaxWidth(0.5f)
+                                .fillMaxWidth(0.5f),
+                            color =  if (isSystemInDarkTheme()) Color(32, 32, 32, 255) else Color(220, 220, 220, 255)
                         )
 
                         Text(

@@ -12,17 +12,24 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavDeepLinkRequest
 import com.example.domain.entity.Translations
 import com.example.domain.usecase.GetThreeLastTranslation
 import com.example.remch.MyViewModel
 import com.example.remch.R
 import com.example.remch.Window
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
+import kotlin.time.Duration
 
 
-@SuppressLint("ViewConstructor")
+@SuppressLint("ViewConstructor", "InflateParams")
 class CustomOverlayView(
     context: Context,
     val window: WindowManager,
@@ -30,14 +37,15 @@ class CustomOverlayView(
     text: List<Translations>
 ) : ViewGroup(context) {
 
-     var layoutInflater: LayoutInflater
-     var mview: View
+    var layoutInflater: LayoutInflater
+    var mview: View
 
 
     init {
 
 
         val randomFromList = text.random()
+
 
 
         layoutInflater =
@@ -50,18 +58,22 @@ class CustomOverlayView(
 
         }
 
-        text?.let {
+
+        text.let {
             mview.findViewById<TextView>(R.id.fromText).text = randomFromList.textFrom
             mview.findViewById<TextView>(R.id.toText).text = randomFromList.textTo
             mview.findViewById<TextView>(R.id.from).text = randomFromList.from
             mview.findViewById<TextView>(R.id.to).text = randomFromList.to
         }
 
+        onAttachedToWindow()
+
+
     }
 
 
     fun createView(context: Context): View {
-
+//        Window(window, layoutParams).close(mview)
         return mview
 
     }

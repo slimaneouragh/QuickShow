@@ -33,7 +33,7 @@ fun SpinningProgressBar(modifier: Modifier = Modifier) {
         animationSpec = infiniteRepeatable(
             animation = tween(count * 90, delayMillis = 0, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        ), label = ""
+        )
     )
 
     Canvas(modifier = modifier.size(40.dp)) {

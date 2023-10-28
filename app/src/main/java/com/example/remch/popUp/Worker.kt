@@ -79,15 +79,6 @@ class Worker(context: Context, workparams: WorkerParameters) : CoroutineWorker(c
         data?.collectLatest {
             withContext(Dispatchers.Main) {
                 Window(window, layoutParams).open(
-//                    CustomOverlayView(
-//                        contex,
-//                        window,
-//                        layoutParams,
-//                        taskdataString!!
-//                    ).createView(
-//                        contex
-//                    )
-
                         CustomOverlayView(
                         contex,
                         window,

@@ -51,6 +51,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.remch.ui.theme.RemchTheme
 import com.example.remch.ui.theme.dosis_font
+import com.example.remch.view.splashScreen.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,93 +73,13 @@ class SplashActivity : ComponentActivity() {
                 )
             ) {
                 RemchTheme {
-                    SplashScreen()
+                    SplashScreen(launchIntent = {
+                        startActivity(Intent(this@SplashActivity,MainActivity::class.java))
+                    })
                 }
             }
         }
     }
 
-    @SuppressLint("CoroutineCreationDuringComposition")
-    @Composable
-    fun SplashScreen() {
 
-
-        var size by remember {
-            mutableStateOf(0f)
-        }
-
-        val scope = rememberCoroutineScope()
-
-        val animateScale by animateFloatAsState(
-            targetValue = size,
-            label = "",
-            animationSpec = tween(300)
-        )
-
-
-        scope.launch {
-            size = 0.5f
-            delay(300)
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-        }
-
-//
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(220, 220, 220, 255)), contentAlignment = Alignment.Center
-        ) {
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(150.dp)
-
-
-            ) {
-                Text(
-                    text = "Quick",
-                    fontFamily = dosis_font[5],
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight(2),
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Divider(
-                    modifier = Modifier
-                        .padding(top = 10.dp, bottom = 10.dp)
-//                        .fillMaxWidth(0.5f)
-                        .scale(
-                            animateScale
-                        ),
-                    thickness = 2.dp,
-                    color = Color(107, 107, 107, 255)
-                )
-                Text(
-                    text = "Show",
-                    fontFamily = dosis_font[5],
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight(2),
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            Text(
-                text = "Cooperate@ With SAS Company \n 2021 / 2023",
-                fontFamily = dosis_font[3],
-                fontSize = 13.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(
-                        bottom = 20.dp
-                    )
-            )
-
-        }
-
-    }
 }
